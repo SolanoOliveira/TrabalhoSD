@@ -1,0 +1,65 @@
+version: "3.8"
+
+# Define os serviços que fazem parte da aplicação.
+services:
+  
+  # Serviço referente ao frontend da aplicação.
+  frontend:
+    # Localização do Dockerfile para construir a imagem do frontend.
+    build: ./frontend
+    ports:
+      - "80:3001"
+    # Define que o serviço frontend depende do serviço backend para ser iniciado.
+    depends_on:
+      - backend
+
+  # Serviço referente ao backend da aplicação.
+  backend:
+    build: ./backend
+    # Define variáveis de ambiente para o serviço backend.
+    environment:
+      - PORT=3000
+      - DB1=mongodb://api:1234@db1:27017/
+      - DB2=mongodb://api:1234@db2:27017/
+    # Mapeamento de portas: expõe a porta 3000 do container como porta 3000 no host.
+    ports:
+      - "3000:3000"
+    # Define que o serviço backend depende dos serviços db1 e db2 para ser iniciado.
+    depends_on:
+      - db1
+      - db2
+
+  # Primeiro serviço de banco de dados usando MongoDB.
+  db1:
+    # Usa a imagem do MongoDB versão 6.
+    image: mongo:6
+    # Caso o container pare por algum motivo, ele será reiniciado automaticamente.
+    restart: always
+    # Define variáveis de ambiente para a inicialização do MongoDB.
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=api
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=db1
+    # Monta um volume para persistência dos dados do banco.
+    volumes:
+      - db_1:/data/db
+
+  # Segundo serviço de banco de dados usando MongoDB.
+  db2:
+    # Usa a imagem do MongoDB versão 6.
+    image: mongo:6
+    # Caso o container pare por algum motivo, ele será reiniciado automaticamente.
+    restart: always
+    # Define variáveis de ambiente para a inicialização do MongoDB.
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=api
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=db2
+    # Monta um volume para persistência dos dados do banco.
+    volumes:
+      - db_2:/data/db
+
+# Define os volumes usados nos serviços. Neste caso, são volumes para persistência de dados dos bancos.
+volumes:
+  db_1:
+  db_2:

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Movie Hub</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://images2.alphacoders.com/694/thumb-1920-694315.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            color: #fafafa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .maior {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .div {
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 3px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        h1 {
+            color: crimson;
+            margin-bottom: 25px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: crimson;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 2px solid crimson;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #fafafa;
+        }
+
+        .btn {
+            cursor: pointer;
+            padding: 12px 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 6px;
+            background-color: forestgreen;
+            color: #fff;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: green;
+            transform: scale(1.05);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 2px dashed crimson;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="maior">
+    <div class="div">
+        <h1>Meus filmes</h1>
+        <!-- AQUI ACONTECE A INSERÇÃO NO BANCO DE DADOS -->
+        <form action="/add" method="post">
+            <div class="form-group">
+                <label for="inputNome" class="form-label">Nome do Filme</label>
+                <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite o nome do filme">
+                <div>
+                    <!-- Botão para adicionar no BD1 -->
+                    <button type="submit" name="btDB1" class="btn">Adicionar em BD1</button>
+                    <!-- Botão para adicionar no BD2 -->
+                    <button type="submit" name="btDB2" class="btn">Adicionar em BD2</button>
+                </div>
+            </div>
+        </form>
+
+        <h1>Filmes Listados</h1>
+        <!-- AQUI ACONTECE A REMOÇÃO DO BANCO DE DADOS -->
+        <form action="/remove" method="post">
+            <ul>
+                {{#each movies}}
+                <li>
+                    <span>{{nome}}</span>
+                    <div>
+                        <!-- Verifica se o filme pertence ao BD1 -->
+                        {{#if db1}}
+                        <!-- Botão para remover do BD1 -->
+                        <button type="submit" name="removeBD1" class="btn" value="{{nome}}">Remover de BD1</button>
+                        {{/if}}
+                        <!-- Verifica se o filme pertence ao BD2 -->
+                        {{#if db2}}
+                        <!-- Botão para remover do BD2 -->
+                        <button type="submit" name="removeBD2" class="btn" value="{{nome}}">Remover de BD2</button>
+                        {{/if}}
+                    </div>
+                </li>
+                {{/each}}
+            </ul>
+        </form>
+    </div>
+</div>
+</body>
+</html>
